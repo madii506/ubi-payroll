@@ -227,8 +227,9 @@
   function startIntro() {
     clearTimeout(introTimer); window.scrollTo(0, 0); document.body.classList.add('intro'); document.body.classList.remove('in');
     intro.hidden = false; intro.className = '';
-    requestAnimationFrame(() => requestAnimationFrame(() => intro.classList.add('go')));
-    introTimer = setTimeout(enter, 2800);
+    const cash = $('#in-cash'); cash.textContent = '$0'; cash.dataset.v = 0;
+    requestAnimationFrame(() => requestAnimationFrame(() => { intro.classList.add('go'); setTimeout(() => { const t0 = performance.now(); (function roll(now) { const u = Math.min(1, (now - t0) / 1300), e = 1 - Math.pow(1 - u, 3); cash.textContent = 'GTA$ ' + nf(8000000 * e); if (u < 1) requestAnimationFrame(roll); })(t0); }, 350); }));
+    introTimer = setTimeout(enter, 3400);
   }
   function enter() { if (intro.hidden) return; clearTimeout(introTimer); intro.classList.add('out'); document.body.classList.remove('intro'); document.body.classList.add('in'); moveInd(); setTimeout(() => { intro.hidden = true; }, 900); setTimeout(reveal, 100); }
   intro.addEventListener('click', enter);
