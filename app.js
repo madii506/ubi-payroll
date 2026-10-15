@@ -59,7 +59,7 @@
   const buyEl = $('#buy'); if (buyEl) buyEl.href = buyUrl; $('#chart').href = CA ? 'https://dexscreener.com/solana/' + CA : 'https://dexscreener.com/solana';
   const regText = h => (XHANDLE ? '@' + XHANDLE + ' ' : '') + 'put me on the payroll: my GTA handle is ' + (h || '____') + ' on ____ (PC / PlayStation / Xbox). holding $UBI.';
   const regUrl = h => 'https://x.com/intent/post?text=' + encodeURIComponent(regText(h));
-  $('#reg').href = regUrl(''); $('#reg2').href = regUrl('');
+  $('#reg').href = regUrl(''); $('#reg2').href = regUrl(''); $('#reg0').href = regUrl('');
   $('#min-hold').textContent = String(C.MIN_HOLD_USD || 20);
   function legacyCopy(text, done) { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) { toast('Copy failed'); } ta.remove(); }
   function copyCA() { const done = () => toast('CA copied'); if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(CA).then(done, () => legacyCopy(CA, done)); else legacyCopy(CA, done); }
@@ -281,9 +281,9 @@
     clearTimeout(introTimer); window.scrollTo(0, 0); document.body.classList.add('intro'); document.body.classList.remove('in');
     intro.hidden = false; intro.className = '';
     requestAnimationFrame(() => requestAnimationFrame(() => intro.classList.add('go')));
-    scene.k = 0.32; introTimer = setTimeout(enter, 3400);
+    scene.k = 0.5; introTimer = setTimeout(enter, 3900);
   }
-  function enter() { if (intro.hidden) return; clearTimeout(introTimer); intro.classList.add('out'); document.body.classList.remove('intro'); document.body.classList.add('in'); moveInd(); setTimeout(() => { intro.hidden = true; }, 900); setTimeout(reveal, 100); }
+  function enter() { if (intro.hidden) return; clearTimeout(introTimer); scene.k = 0.32; intro.classList.add('out'); document.body.classList.remove('intro'); document.body.classList.add('in'); moveInd(); setTimeout(() => { intro.hidden = true; }, 900); setTimeout(reveal, 100); }
   intro.addEventListener('click', enter);
   document.addEventListener('keydown', e => { if (!intro.hidden && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); enter(); } });
   $('#replay').addEventListener('click', () => { go('home', false); startIntro(); });
