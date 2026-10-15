@@ -56,7 +56,7 @@
 
   /* ---------- links + CA */
   const buyUrl = CA ? 'https://pump.fun/coin/' + CA : 'https://pump.fun/';
-  $('#buy').href = buyUrl; $('#chart').href = CA ? 'https://dexscreener.com/solana/' + CA : 'https://dexscreener.com/solana';
+  const buyEl = $('#buy'); if (buyEl) buyEl.href = buyUrl; $('#chart').href = CA ? 'https://dexscreener.com/solana/' + CA : 'https://dexscreener.com/solana';
   const regText = h => (XHANDLE ? '@' + XHANDLE + ' ' : '') + 'put me on the payroll: my GTA handle is ' + (h || '____') + ' on ____ (PC / PlayStation / Xbox). holding $UBI.';
   const regUrl = h => 'https://x.com/intent/post?text=' + encodeURIComponent(regText(h));
   $('#reg').href = regUrl(''); $('#reg2').href = regUrl('');
@@ -227,9 +227,8 @@
   function startIntro() {
     clearTimeout(introTimer); window.scrollTo(0, 0); document.body.classList.add('intro'); document.body.classList.remove('in');
     intro.hidden = false; intro.className = '';
-    const cash = $('#in-cash'); cash.textContent = '$0'; cash.dataset.v = 0;
-    requestAnimationFrame(() => requestAnimationFrame(() => { intro.classList.add('go'); setTimeout(() => { const t0 = performance.now(); (function roll(now) { const u = Math.min(1, (now - t0) / 1300), e = 1 - Math.pow(1 - u, 3); cash.textContent = 'GTA$ ' + nf(8000000 * e); if (u < 1) requestAnimationFrame(roll); })(t0); }, 350); }));
-    introTimer = setTimeout(enter, 3400);
+    requestAnimationFrame(() => requestAnimationFrame(() => intro.classList.add('go')));
+    introTimer = setTimeout(enter, 2700);
   }
   function enter() { if (intro.hidden) return; clearTimeout(introTimer); intro.classList.add('out'); document.body.classList.remove('intro'); document.body.classList.add('in'); moveInd(); setTimeout(() => { intro.hidden = true; }, 900); setTimeout(reveal, 100); }
   intro.addEventListener('click', enter);
