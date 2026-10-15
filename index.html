@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ubi</title>
+<meta name="description" content="UBI. Universal basic income for the new city. Register your GTA handle, get paid in-game cash every day from the coin's fees. Every payslip public.">
+<meta property="og:title" content="UBI — universal basic income for the new city">
+<meta property="og:description" content="Get paid every day. In-game cash, from the fees. Payslips public.">
+<meta property="og:image" content="https://ubi-payroll.vercel.app/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ubi-payroll.vercel.app/img/og.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="img/favicon-64.png">
+<link rel="apple-touch-icon" href="img/favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=2">
+<noscript><style>body.intro .top,body.intro main,body.intro footer{visibility:visible!important}#intro{display:none}</style></noscript>
+</head>
+<body class="intro">
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<div id="intro" hidden>
+  <div class="in-box">
+    <img class="in-mark" src="img/mark.png" alt="" width="150" height="116">
+    <div class="in-word" aria-label="ubi"><span>U</span><span>B</span><span>I</span></div>
+  </div>
+</div>
+
+<header class="top">
+  <a class="brand" href="#home"><img src="img/mark.png" alt="" width="52" height="40"><span>UBI</span></a>
+  <nav class="tabs" id="tabs">
+    <button data-tab="home" class="on">Payroll</button>
+    <button data-tab="payslips">Payslips</button>
+    <i class="ind"></i>
+  </nav>
+</header>
+<div class="ticker" id="ticker" aria-hidden="true"><div class="tk" id="tk"></div></div>
+
+<main>
+<!-- ================= home -->
+<section class="panel on" id="tab-home">
+  <div class="hero">
+    <div class="hero-l">
+      <img class="hero-mark" src="img/mark.png" alt="" width="96" height="74">
+      <h1><span class="grad">UBI</span></h1>
+      <p class="tagline">Universal basic income for the new city.</p>
+      <p class="lead">Hold $UBI, register your GTA handle, get paid in in-game cash every day. The coin's fees fund the payroll. Every payslip is public.</p>
+      <div class="ca" id="ca-box" hidden>
+        <code id="ca-text">CA not set.</code>
+        <button class="btn sm" id="copyca" disabled>Copy</button>
+      </div>
+      <div class="row">
+        <a class="btn lg" id="reg" href="#" target="_blank" rel="noopener">Get on the payroll</a>
+        <a class="btn lg ghost" id="buy" href="#" target="_blank" rel="noopener">Buy on pump.fun</a>
+      </div>
+    </div>
+    <div class="hero-r">
+      <div class="card stat-card">
+        <div class="card-h"><span>Pause menu</span><span class="mono"><a id="chart" href="#" target="_blank" rel="noopener">chart ↗</a> · <span id="stamp">—</span></span></div>
+        <div class="stats">
+          <div><small>Cash (market cap)</small><b id="s-mc">—</b></div>
+          <div><small>24h volume</small><b id="s-vol">—</b></div>
+          <div><small>Price</small><b id="s-px">—</b></div>
+          <div><small>1h</small><b id="s-h1">—</b></div>
+          <div><small>Buys / sells, 1h</small><b id="s-bs">—</b></div>
+          <div><small>Wanted level</small><b id="s-wl">—</b></div>
+        </div>
+        <div class="count">
+          <small>Next payday in</small>
+          <div class="cd" id="cd"><b>--</b><i>d</i><b>--</b><i>h</i><b>--</b><i>m</i><b>--</b><i>s</i></div>
+        </div>
+      </div>
+      <div class="card next-card" id="next-card">
+        <div class="card-h"><span>This week's pot</span><span class="tag" id="next-tag">fees</span></div>
+        <div class="next-name" id="next-name">—</div>
+        <div class="bar"><i id="next-bar"></i></div>
+        <div class="next-sub" id="next-sub">—</div>
+      </div>
+    </div>
+  </div>
+  <div class="big-tape" aria-hidden="true"><div class="bt"><span>get paid every day</span><span>in-game cash, from the fees</span><span>every payslip public</span><span>universal basic income for the new city</span><span>get paid every day</span><span>in-game cash, from the fees</span><span>every payslip public</span><span>universal basic income for the new city</span></div></div>
+
+  <div class="sec">
+    <div class="sec-h big"><h2>How payday works</h2><p>Four steps. No wallet connect, no form that goes nowhere.</p></div>
+    <div class="steps" id="steps">
+      <div class="step"><i>01</i><b>Hold</b><p>Hold $UBI in a wallet you can post from. The minimum is small and it's printed on this page.</p></div>
+      <div class="step"><i>02</i><b>Register your handle</b><p>Post your GTA handle and platform from the X account that holds. One handle per account.</p></div>
+      <div class="step"><i>03</i><b>Every day, 18:00 UTC</b><p>The day's fees buy official cash cards. Codes go out by DM to as many handles as the pot covers; the rest roll into a draw.</p></div>
+      <div class="step"><i>04</i><b>Payslip on the wall</b><p>Every payment is a line on the public ledger: date, handle, amount, proof. Never the code.</p></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-h big"><h2>Where the money comes from</h2><p>Every trade of $UBI pays a creator fee. The payroll spends it, every day, on the people on it.</p></div>
+    <div class="route card">
+      <div class="card-h"><span>The payroll loop</span><span class="mono">every day, on the ledger</span></div>
+      <div class="flow" id="flow">
+        <div class="node"><div class="ic coin">◎</div><b>Fees</b><small>every trade pays the creator fee</small></div>
+        <div class="arrow"><i></i><i></i><i></i></div>
+        <div class="node"><div class="ic card-ic">▭</div><b>Cash cards</b><small>bought at the official store</small></div>
+        <div class="arrow"><i></i><i></i><i></i></div>
+        <div class="node"><div class="ic gta">@</div><b>Handles</b><small>everyone registered, in order</small></div>
+        <div class="arrow"><i></i><i></i><i></i></div>
+        <div class="node"><div class="ic car">✓</div><b>Payslips</b><small>public, with proof</small></div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card calc">
+        <div class="card-h"><span>Payday calculator</span><span class="mono">volume → pay</span></div>
+        <label>24h volume (USD) <input type="range" id="c-vol" min="10000" max="5000000" step="10000" value="500000"><output id="c-vol-o">$500,000</output></label>
+        <label>Creator fee share <input type="range" id="c-fee" min="0.05" max="0.95" step="0.05" value="0.95"><output id="c-fee-o">0.95%</output></label>
+        <label>Handles on the payroll <input type="range" id="c-n" min="10" max="5000" step="10" value="250"><output id="c-n-o">250</output></label>
+        <div class="calc-out">
+          <div><small>Fees per day</small><b id="c-fees">—</b></div>
+          <div><small>Cards per day</small><b id="c-cars">—</b></div>
+          <div><small>In-game cash per day</small><b id="c-gta">—</b></div>
+          <div><small>Per handle, per day</small><b id="c-days">—</b></div>
+        </div>
+        <p class="fine">Creator fee tiers on pump.fun change with market cap; this uses the share you set. Past volume is not a promise.</p>
+      </div>
+      <div class="card">
+        <div class="card-h"><span>Cash card rates</span><span class="mono">official store</span></div>
+        <table class="tbl" id="rates">
+          <thead><tr><th>Card</th><th>Costs</th><th>Gives</th><th>Per $1</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <p class="fine">The payroll buys the biggest card the pot allows. Rates are the store's, not ours.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="band card" id="dayone">
+      <div class="band-l">
+        <div class="eyebrow-s">Day one</div>
+        <h2>The new city opens</h2>
+        <p>The moment the new city sells in-game cash, payday moves there. Same payroll, same handles, same ledger. Until then it pays in the current game.</p>
+      </div>
+      <div class="band-r">
+        <div class="cd-big" id="cd2"><div><b>--</b><i>days</i></div><div><b>--</b><i>hours</i></div><div><b>--</b><i>min</i></div><div><b>--</b><i>sec</i></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-h big"><h2>The payroll so far</h2><p>Every number here is a sum of ledger lines. Nothing ticks over because someone said so.</p></div>
+    <div class="garage-top">
+      <div class="card"><small>On the payroll</small><b id="g-n">0</b></div>
+      <div class="card"><small>In-game cash paid out</small><b id="g-bal">GTA$ 0</b></div>
+      <div class="card"><small>Paydays</small><b id="g-usd">0</b></div>
+      <div class="card"><small>Fees claimed</small><b id="g-sol">0 SOL</b></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-h big"><h2>Talk to payroll</h2><p>Straight answers.</p></div>
+    <div class="faq" id="faq">
+      <details open><summary>What is UBI?</summary><p>A coin with a payroll. Every trade of $UBI pays a creator fee. Every day at 18:00 UTC the fees buy official in-game cash cards, and the codes go out to the GTA handles registered on the payroll. Every payment is logged publicly.</p></details>
+      <details><summary>How do I get on the payroll?</summary><p>Hold $UBI, then post your GTA handle and platform from the X account you hold with. The register button writes the post for you. One handle per account.</p></details>
+      <details><summary>Does everyone get paid every day?</summary><p>As many as the pot covers, in registration order, then the rest roll into a draw. The pot is public, the order is public, the draw is posted. It's basic income, not guaranteed income.</p></details>
+      <details><summary>Is this a return or a dividend?</summary><p>No. Paydays are gifts of in-game cash paid for by fees. They are not a return, not a dividend, not a promise, and holding gives you a place on the payroll, not a claim on it.</p></details>
+      <details><summary>Which platforms?</summary><p>PC, PlayStation and Xbox. Codes are platform-specific and some platforms restrict codes by region; the payroll says what it can deliver before payday.</p></details>
+      <details><summary>Is this affiliated with Rockstar or Take-Two?</summary><p>No. UBI is an independent fan project. Cash cards are bought from official stores at the published price. Game names and marks belong to their owners.</p></details>
+      <details><summary>Is this advice?</summary><p>No. Memecoins are extremely risky and most go to zero. Nothing here is advice.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= payslips -->
+<section class="panel" id="tab-payslips">
+  <div class="sec-h"><h2>Payslips</h2><p>Every fee claim, every payday, every handle paid. Public, exportable, boring on purpose.</p></div>
+  <div class="garage-top">
+    <div class="card"><small>Payslips</small><b id="p-n">0</b></div>
+    <div class="card"><small>Handles paid</small><b id="p-h">0</b></div>
+    <div class="card"><small>Biggest payday</small><b id="p-max">—</b></div>
+    <div class="card"><small>Last payday</small><b id="p-last">—</b></div>
+  </div>
+  <div class="row between sec-s">
+    <div class="mono small" id="l-meta">updated: — · entries: 0</div>
+    <div class="row"><button class="btn ghost sm" id="csv">Export CSV</button><a class="btn ghost sm" href="ledger.json" target="_blank" rel="noopener">Raw JSON</a></div>
+  </div>
+  <table class="tbl" id="ledger"><thead><tr><th>Date</th><th>Entry</th><th>SOL</th><th>USD</th><th>GTA$</th><th>Handle</th><th>Proof</th></tr></thead><tbody></tbody></table>
+  <div class="empty" id="l-empty">The first payslip is still ahead. Payday is 18:00 UTC.</div>
+  <div class="sec">
+    <div class="sec-h big"><h2>Wall of payslips</h2><p>Every payment, as a screenshot. Handles as the player wrote them; everything else blurred.</p></div>
+    <div class="wall" id="wall"></div>
+    <div class="empty" id="wall-empty">No payslips yet. The first one goes up on the first payday.</div>
+  </div>
+</section>
+</main>
+
+<div id="rugged" hidden><div><b>RUGGED</b><span id="rug-why">-30% in an hour. payday is still 18:00.</span><button class="btn" id="rug-x">respawn</button></div></div>
+<div id="toasts"></div>
+
+<footer>
+  <div><img src="img/mark.png" alt="" width="30" height="23"> UBI · universal basic income for the new city</div>
+  <div class="small"><button class="lnk" id="replay">replay intro</button> · keys 1–2 switch pages</div>
+</footer>
+
+<script src="config.js?v=1"></script>
+<script src="app.js?v=2"></script>
+</body>
+</html>
