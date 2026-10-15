@@ -222,13 +222,66 @@
   }
   $('#rug-x').addEventListener('click', () => { $('#rugged').hidden = true; document.body.classList.remove('rug'); toast('respawned. payday is still 18:00.'); });
 
+  /* ---------- the scene: a neon road into the city, drawn on the canvas behind everything */
+  const bgc = $('#bg'), cx2 = bgc.getContext('2d');
+  const scene = { t: 0, speed: 0.4, k: 0.32, w: 0, h: 0, stars: [], bld: [], cars: [], last: 0 };
+  function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function seedScene() {
+    const R = rng(7);
+    scene.stars = Array.from({ length: 170 }, () => ({ x: R(), y: R() * 0.55, r: 0.5 + R() * 1.3, p: R() * 6.28 }));
+    scene.bld = []; let x = -0.02;
+    while (x < 1.05) { const w = 0.014 + R() * 0.045; scene.bld.push({ x, w, h: 0.03 + R() * 0.12, win: Array.from({ length: 2 + Math.floor(R() * 7) }, () => ({ x: R(), y: R(), p: R() * 6.28 })) }); x += w + 0.004; }
+    scene.cars = Array.from({ length: 6 }, (_, i) => ({ lane: (i % 2 ? 1 : -1) * (0.3 + R() * 0.55), z: 0.3 + R() * 8, v: 0.5 + R() * 0.7, away: i % 2 === 0 }));
+  }
+  function sizeScene() { const dpr = Math.min(2, window.devicePixelRatio || 1); scene.w = innerWidth; scene.h = innerHeight; bgc.width = Math.round(scene.w * dpr); bgc.height = Math.round(scene.h * dpr); cx2.setTransform(dpr, 0, 0, dpr, 0, 0); }
+  function laneX(L, y, hz, vx, w, h) { const f = (y - hz) / (h + 40 - hz); return vx + L * (2 + (w * 0.11 - 2) * f); }
+  function drawScene(now) {
+    const dt = Math.min(0.05, scene.last ? (now - scene.last) / 1000 : 0); scene.last = now; scene.t += dt * scene.speed;
+    const c = cx2, w = scene.w, h = scene.h, k = scene.k, hz = h * 0.6, vx = w / 2, S = 0.55;
+    let g = c.createLinearGradient(0, 0, 0, hz); g.addColorStop(0, '#040c09'); g.addColorStop(1, '#1a1030'); c.fillStyle = g; c.fillRect(0, 0, w, hz);
+    g = c.createLinearGradient(0, hz, 0, h); g.addColorStop(0, '#0b1e18'); g.addColorStop(1, '#040c09'); c.fillStyle = g; c.fillRect(0, hz, w, h - hz);
+    c.fillStyle = '#fff';
+    for (const s of scene.stars) { c.globalAlpha = (0.3 + 0.7 * Math.abs(Math.sin(scene.t * 0.9 + s.p))) * (0.45 + 0.55 * k); c.beginPath(); c.arc(s.x * w, s.y * h, s.r, 0, 6.2832); c.fill(); }
+    c.globalAlpha = 1;
+    const sr = Math.min(w, h) * 0.17, sx = w * 0.72, sy = hz - sr * 0.2;
+    c.save(); c.beginPath(); c.rect(0, 0, w, hz); c.clip(); c.globalAlpha = 0.3 + 0.7 * k;
+    g = c.createRadialGradient(sx, sy, sr * 0.5, sx, sy, sr * 2.4); g.addColorStop(0, 'rgba(255,92,170,.38)'); g.addColorStop(1, 'rgba(255,92,170,0)'); c.fillStyle = g; c.fillRect(sx - sr * 2.4, sy - sr * 2.4, sr * 4.8, sr * 4.8);
+    g = c.createLinearGradient(0, sy - sr, 0, sy + sr); g.addColorStop(0, '#ffd27a'); g.addColorStop(0.45, '#ff6fae'); g.addColorStop(1, '#8a2a7a'); c.fillStyle = g; c.beginPath(); c.arc(sx, sy, sr, 0, 6.2832); c.fill();
+    c.fillStyle = '#1a1030'; let y = sy + sr * 0.08, i = 0;
+    while (y < sy + sr) { const band = Math.max(3, sr * 0.1 - i * sr * 0.011), gap = Math.max(2, sr * 0.018 + i * sr * 0.011); c.fillRect(sx - sr - 2, y + band, sr * 2 + 4, gap); y += band + gap; i++; }
+    c.restore();
+    c.fillStyle = '#06081a';
+    for (const b of scene.bld) c.fillRect(b.x * w, hz - b.h * h, b.w * w, b.h * h + 2);
+    for (const b of scene.bld) { const bx = b.x * w, bw = b.w * w, bh = b.h * h; for (const win of b.win) { if (Math.sin(scene.t * 0.5 + win.p) < -0.25) continue; c.fillStyle = win.p > 4.2 ? 'rgba(125,255,182,.85)' : 'rgba(255,228,170,.6)'; c.globalAlpha = 0.25 + 0.75 * k; c.fillRect(bx + 2 + win.x * (bw - 5), hz - bh + 3 + win.y * (bh - 7), 2, 2); } }
+    c.globalAlpha = 1;
+    c.strokeStyle = 'rgba(25,227,211,' + (0.35 + 0.65 * k) + ')'; c.lineWidth = 1.5; c.beginPath(); c.moveTo(0, hz + 0.5); c.lineTo(w, hz + 0.5); c.stroke();
+    c.lineWidth = 1;
+    for (let n = -14; n <= 14; n++) { const a = (0.1 + 0.28 * (1 - Math.abs(n) / 14)) * (0.35 + 0.65 * k); c.strokeStyle = 'rgba(25,227,211,' + a + ')'; c.beginPath(); c.moveTo(vx + n * 2, hz); c.lineTo(vx + n * w * 0.11, h + 40); c.stroke(); }
+    const frac = scene.t % 1;
+    for (let n = 0; n < 16; n++) { const z = n + 1 - frac, p = 1 / (1 + z * S), yy = hz + (h - hz) * p; c.strokeStyle = 'rgba(25,227,211,' + ((0.06 + 0.6 * p) * (0.35 + 0.65 * k)) + ')'; c.lineWidth = 0.6 + 2.2 * p; c.beginPath(); c.moveTo(0, yy); c.lineTo(w, yy); c.stroke(); }
+    for (const car of scene.cars) {
+      car.z += dt * car.v * scene.speed * 2.2 * (car.away ? 1 : -1);
+      if (car.z > 9.5) car.z = 0.25; if (car.z < 0.25) car.z = 9.5;
+      const p = 1 / (1 + car.z * S), yy = hz + (h - hz) * p, x = laneX(car.lane, yy, hz, vx, w, h), r = 0.8 + 5 * p, gap = 2 + 9 * p;
+      const col = car.away ? '255,92,122' : '255,246,224'; const a = (0.25 + 0.75 * p) * (0.3 + 0.7 * k);
+      c.fillStyle = 'rgba(5,6,18,' + (0.5 + 0.5 * p) + ')'; c.fillRect(x - gap - r * 1.4, yy - r * 1.6, (gap + r * 1.4) * 2, r * 2.6);
+      c.fillStyle = 'rgba(' + col + ',' + (a * 0.18) + ')'; c.fillRect(x - gap - r * 2.2, yy - r * 1.2, (gap + r * 2.2) * 2, r * 2.4);
+      c.fillStyle = 'rgba(' + col + ',' + a + ')'; c.fillRect(x - gap - r, yy - r * 0.5, r * 2, r); c.fillRect(x + gap - r, yy - r * 0.5, r * 2, r);
+    }
+    c.fillStyle = 'rgba(4,12,9,' + (0.72 * (1 - k)) + ')'; c.fillRect(0, 0, w, h);
+  }
+  function loop(now) { if (!document.hidden) drawScene(now); else scene.last = 0; requestAnimationFrame(loop); }
+  seedScene(); sizeScene(); window.addEventListener('resize', sizeScene);
+  if (REDUCED) { scene.speed = 0; drawScene(0); } else requestAnimationFrame(loop);
+  function tweenScene(k, speed, ms) { const t0 = performance.now(), k0 = scene.k, s0 = scene.speed; (function f(now) { const u = Math.min(1, (now - t0) / ms), e = 1 - Math.pow(1 - u, 3); scene.k = k0 + (k - k0) * e; scene.speed = s0 + (speed - s0) * e; if (u < 1) requestAnimationFrame(f); })(t0); }
+
   /* ---------- intro */
   const intro = $('#intro'); let introTimer = null;
   function startIntro() {
     clearTimeout(introTimer); window.scrollTo(0, 0); document.body.classList.add('intro'); document.body.classList.remove('in');
     intro.hidden = false; intro.className = '';
     requestAnimationFrame(() => requestAnimationFrame(() => intro.classList.add('go')));
-    introTimer = setTimeout(enter, 2700);
+    scene.k = 0.32; introTimer = setTimeout(enter, 3400);
   }
   function enter() { if (intro.hidden) return; clearTimeout(introTimer); intro.classList.add('out'); document.body.classList.remove('intro'); document.body.classList.add('in'); moveInd(); setTimeout(() => { intro.hidden = true; }, 900); setTimeout(reveal, 100); }
   intro.addEventListener('click', enter);
