@@ -269,3 +269,6 @@ body{background-image:radial-gradient(circle at 1px 1px,rgba(13,42,34,.07) 1px,t
 .btn.lg{animation:glowg 2.6s infinite}
 @keyframes glowg{0%,100%{box-shadow:0 6px 20px rgba(13,42,34,.18)}50%{box-shadow:0 10px 36px rgba(23,168,119,.45)}}
 @media(max-width:720px){.in-hud{top:-70px;right:10px}}
+
+h1{margin-bottom:22px}
+.gov{border-top:2px solid transparent;border-image:linear-gradient(90deg,var(--pink),var(--orange),var(--teal),var(--g3)) 1}

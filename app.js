@@ -79,7 +79,7 @@
     [Math.floor(s / 3600), Math.floor(s / 60) % 60, s % 60].forEach((n, i) => { const v = String(n).padStart(2, '0'); if (cdEls[i].textContent === v) return; cdEls[i].textContent = v; cdEls[i].classList.remove('pop'); void cdEls[i].offsetWidth; cdEls[i].classList.add('pop'); });
     const r = Math.max(0, Math.floor((release - Date.now()) / 1000));
     [Math.floor(r / 86400), Math.floor(r / 3600) % 24, Math.floor(r / 60) % 60, r % 60].forEach((n, i) => { if (cd2[i]) cd2[i].textContent = String(n).padStart(2, '0'); });
-    $('#gov-clock').textContent = new Date().toUTCString().slice(17, 25) + ' UTC';
+    const gc = $('#gov-clock'); if (gc) gc.textContent = new Date().toUTCString().slice(17, 25) + ' UTC';
   }
   tick(); setInterval(tick, 1000);
 
@@ -204,7 +204,7 @@
   vol.addEventListener('input', calc); fee.addEventListener('input', calc); cn.addEventListener('input', calc);
 
   /* ---------- live (DexScreener) */
-  function offline(word, stamp) { $('#live-word').textContent = word; document.body.classList.remove('live'); $('#stamp').textContent = stamp; }
+  function offline(word, stamp) { const lw = $('#live-word'); if (lw) lw.textContent = word; document.body.classList.remove('live'); $('#stamp').textContent = stamp; }
   async function live() {
     if (!CA) { offline('pre-launch', 'CA not set'); return; }
     try {
@@ -213,7 +213,7 @@
       pairs.sort((a, b) => ((b.liquidity && b.liquidity.usd) || 0) - ((a.liquidity && a.liquidity.usd) || 0)); const p = pairs[0];
       const L = { price: +p.priceUsd || 0, h1: +((p.priceChange || {}).h1 || 0), buys: ((p.txns || {}).h1 || {}).buys || 0, sells: ((p.txns || {}).h1 || {}).sells || 0, marketCap: p.marketCap || p.fdv || 0, vol: (p.volume || {}).h24 || 0 };
       state.live = L;
-      $('#live-word').textContent = 'live'; document.body.classList.add('live'); $('#stamp').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const lw = $('#live-word'); if (lw) lw.textContent = 'live'; document.body.classList.add('live'); $('#stamp').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       countTo($('#s-mc'), L.marketCap, fmt.usd); countTo($('#s-vol'), L.vol, fmt.usd); $('#s-px').textContent = fmt.px(L.price);
       const h = $('#s-h1'); h.textContent = fmt.pct(L.h1); h.className = L.h1 > 0 ? 'up' : L.h1 < 0 ? 'down' : '';
       $('#s-bs').textContent = L.buys + ' / ' + L.sells; $('#s-fee').textContent = '≈ ' + fmt.usd(L.vol * (+C.FEE_PCT || 0.95) / 100);
